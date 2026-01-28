@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-texture {
+  background-image: url("/bg-texture.webp");
+  background-size: 720px 460px;
+  background-repeat: repeat;
+  background-position: center;
+}
+
+/* Ensure anchored sections aren't hidden by the fixed header */
+:root{
+  --header-height: 5.5rem;
+}
+
+/* increase header offset on small screens where header is taller */
+@media (max-width: 768px){
+  :root{ --header-height: 7.5rem; }
+}
+
+html {
+  scroll-padding-top: var(--header-height);
+}
+
+/* Mobile header nav: allow horizontal scrolling if items overflow */
+.header nav ul {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  /* remove extra bottom padding that could reveal a scrollbar track */
+  padding-bottom: 0;
+  /* hide visible scrollbar tracks on small devices */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+.header nav ul::-webkit-scrollbar {
+  height: 0; /* Chromium/Chrome/Safari */
+  display: none;
+}
+.header nav ul li {
+  scroll-snap-align: center;
+}
+
+/* smaller nav link sizes and additional padding on small screens */
+@media (max-width: 768px){
+  .header nav ul a {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* ensure header height variable is used by the header for consistency */
+.header {
+  height: var(--header-height);
+}
+
+/* Anchor offset: create invisible pseudo element so target sections are not hidden under fixed header */
+section[id]::before {
+  content: "";
+  display: block;
+  height: var(--header-height);
+  margin-top: calc(-1 * var(--header-height));
+  pointer-events: none;
+}
+
+.button-cutout {
+  position: relative;
+  filter: drop-shadow(0 1px 0 #000) drop-shadow(-1px 0 0 #000)
+    drop-shadow(1px 0 0 #000) drop-shadow(0 -1px 0 #000)
+    drop-shadow(8px 8px 0 #000);
+
+  &:hover {
+    filter: drop-shadow(0 1px 0 #000) drop-shadow(-1px 0 0 #000)
+      drop-shadow(1px 0 0 #000) drop-shadow(0 -1px 0 #000)
+      drop-shadow(2px 2px 0 #000);
+  }
+
+  &::before {
+    position: absolute;
+    top: 0;
+    right: calc(100% - 1px);
+    content: "";
+    background: inherit;
+    width: 1rem;
+    height: 100%;
+    clip-path: polygon(
+      23% 19%,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      29% 79%,
+      9% 80%,
+      0 33%
+    );
+  }
+
+  &::after {
+    position: absolute;
+    top: 0;
+    left: calc(100% - 1px);
+    content: "";
+    background: inherit;
+    width: 1rem;
+    height: 100%;
+    clip-path: polygon(
+      100% 0,
+      74% 28%,
+      100% 29%,
+      100% 70%,
+      84% 78%,
+      100% 100%,
+      0 100%,
+      0 0
+    );
+  }
+}
+
+.stack-layout {
+  display: grid;
+  grid-template-areas: "stack";
+  place-items: center;
+}
+
+.stack-layout > * {
+  grid-area: stack;
+}
+
+.skater-scribble-path {
+  opacity: 0.8;
+  stroke-dasharray: 2300;
+  stroke-dashoffset: -2300;
+  transition: stroke-dashoffset 1s ease-in-out 0.2s;
+  transform-origin: center center;
+}
+
+.skater:hover .skater-scribble-path {
+  stroke-dashoffset: 0;
+}
+
+.slide-in-hidden {
+  opacity: 0;
+  transform: translateX(-100px);
+}
+
+@keyframes slide-in {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
